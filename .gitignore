@@ -1,5 +1,7 @@
 examples-data/
 distributed
+osqueue
+embedded
 
 docs/akb/*
 !docs/akb/.config.yaml
