@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package osqueue.v1;
+
+option go_package = "github.com/esnunes/osqueue/proto/osqueue/v1;osqueuev1";
+
+service QueueService {
+  rpc Push(PushRequest) returns (PushResponse);
+  rpc Claim(ClaimRequest) returns (ClaimResponse);
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+  rpc Complete(CompleteRequest) returns (CompleteResponse);
+}
+
+message PushRequest {
+  bytes data = 1;
+}
+
+message PushResponse {
+  string job_id = 1;
+}
+
+message ClaimRequest {
+  string worker_id = 1;
+}
+
+message ClaimResponse {
+  string job_id = 1;
+  bytes data = 2;
+  bool empty = 3;
+}
+
+message HeartbeatRequest {
+  string job_id = 1;
+  string worker_id = 2;
+}
+
+message HeartbeatResponse {}
+
+message CompleteRequest {
+  string job_id = 1;
+  string worker_id = 2;
+}
+
+message CompleteResponse {}
