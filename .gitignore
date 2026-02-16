@@ -1,1 +1,6 @@
 examples-data/
+distributed
+
+docs/akb/*
+!docs/akb/.config.yaml
+!docs/akb/.manifest.json
