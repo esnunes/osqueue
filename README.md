@@ -112,7 +112,7 @@ go run ./examples/embedded
 
 # Multi-process gRPC mode (run each in a separate terminal)
 go run ./examples/distributed broker
-go run ./examples/distributed publisher
+go run ./examples/distributed publisher     # default 10 tasks; pass a number to override
 go run ./examples/distributed consumer
 ```
 

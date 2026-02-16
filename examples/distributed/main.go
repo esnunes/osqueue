@@ -2,7 +2,7 @@
 // A single binary with three subcommands:
 //
 //	go run ./examples/distributed broker     — starts broker + gRPC server
-//	go run ./examples/distributed publisher  — pushes 10 tasks via gRPC
+//	go run ./examples/distributed publisher [N] — pushes N tasks via gRPC (default 10)
 //	go run ./examples/distributed consumer   — claims and completes tasks via gRPC
 //
 // Run each in a separate terminal. Start the broker first.
@@ -16,6 +16,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 
 	"github.com/esnunes/osqueue/broker"
@@ -30,9 +31,9 @@ type Task struct {
 }
 
 const (
-	addr     = "localhost:9090"
-	dataDir  = "./examples-data"
-	numTasks = 10
+	addr            = "localhost:9090"
+	dataDir         = "./examples-data"
+	defaultNumTasks = 10
 )
 
 func main() {
@@ -97,6 +98,16 @@ func runBroker() {
 }
 
 func runPublisher() {
+	numTasks := defaultNumTasks
+	if len(os.Args) > 2 {
+		n, err := strconv.Atoi(os.Args[2])
+		if err != nil || n <= 0 {
+			fmt.Fprintf(os.Stderr, "invalid number of tasks: %s\n", os.Args[2])
+			os.Exit(1)
+		}
+		numTasks = n
+	}
+
 	ctx := context.Background()
 
 	w, err := worker.New(ctx, worker.Config{
