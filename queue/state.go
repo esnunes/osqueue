@@ -14,6 +14,7 @@ type Status string
 const (
 	StatusUnclaimed  Status = "unclaimed"
 	StatusInProgress Status = "in_progress"
+	StatusCompleted  Status = "completed"
 )
 
 // Job represents a single unit of work in the queue.
@@ -79,6 +80,7 @@ func (s *State) CompleteJob(jobID, workerID string, now time.Time) (Job, bool) {
 	for i := range s.Jobs {
 		if s.Jobs[i].ID == jobID && s.Jobs[i].WorkerID == workerID && s.Jobs[i].Status == StatusInProgress {
 			job := s.Jobs[i]
+			job.Status = StatusCompleted
 			job.CompletedAt = now
 			s.Jobs = append(s.Jobs[:i], s.Jobs[i+1:]...)
 			return job, true
